@@ -13,6 +13,9 @@ class Particula {
 
     this.velAng = random(-0.1, 0.1);
 
+    this.ang = random(0, 360);      
+    this.velRot = random(-0.1, 0.1);
+
     const paleta = [
       color(255, 0, 150),
       color(255, 100, 200),
@@ -28,6 +31,7 @@ class Particula {
       this.vel.rotate(this.velAng);
       this.tVida -= 1;
       this.pos.add(this.vel);
+      this.ang += this.velRot;
     }
 
     if (this.tVida <= 0 && !this.estaMuerta) {
@@ -36,54 +40,26 @@ class Particula {
   }
 
   display() {
-    noStroke();
+    stroke(255, 30);
+    strokeWeight(1);
 
-    this.diamF = map(this.tVida, this.tVidaInicial, 0, this.diam, 0);
+    let diamF = map(this.tVida, this.tVidaInicial, 0, this.diam, 0);
     let alpha = map(this.tVida, 0, this.tVidaInicial, 0, 255);
 
     push();
     translate(this.pos.x, this.pos.y);
+    rotate(this.ang);
+
+    rectMode(CENTER);
 
     this.c.setAlpha(alpha);
     fill(this.c);
-    circle(0, 0, this.diamF);
+    square(0, 0, diamF);
 
-    this.c.setAlpha(alpha * 0.1);
+    this.c.setAlpha(alpha * 0.15);
     fill(this.c);
-    circle(0, 0, this.diamF * 1.2);
+    square(0, 0, diamF * 1.3);
 
     pop();
-  }
-}
-
-
-let sp = [];
-
-function setup() {
-  angleMode(DEGREES);
-  createCanvas(windowWidth, windowHeight);
-}
-
-function draw() {
-  background(0, 0, 0, 30);
-
-  for (let i = 0; i < sp.length - 1; i++) {
-    noFill();
-    stroke(255, 255, 255, sp[i].tVida * 2);
-    line(sp[i].pos.x, sp[i].pos.y, sp[i + 1].pos.x, sp[i + 1].pos.y);
-  }
-
-  for (let i = sp.length - 1; i >= 0; i--) {
-    let particula = sp[i];
-    particula.update();
-    particula.display();
-
-    if (particula.estaMuerta) {
-      sp.splice(i, 1);
-    }
-  }
-
-  if (frameCount % 2 === 0) {
-    sp.push(new Particula(mouseX, mouseY));
   }
 }

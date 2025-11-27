@@ -27,7 +27,7 @@ function draw() {
     }
   }
 
-  let np = new Particula(mouseX, mouseY);
-  sp.push(np);
+  if (frameCount % 2 === 0) {
+    sp.push(new Particula(mouseX, mouseY));
+  }
 }
-
